@@ -1,0 +1,16 @@
+.search-form {
+	display: flex;
+	flex-wrap: wrap;
+	background-color: #fafafa;
+
+	> * {
+		flex: 1;
+		min-width: 220px;
+		margin-right: 20px;
+
+		> .label-text {
+			display: inline-block;
+			width: 60px;
+		}
+	}
+}

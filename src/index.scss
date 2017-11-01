@@ -1,0 +1,15 @@
+$margin-size: 20px;
+
+body {
+	margin: 0;
+}
+
+.container {
+	margin: $margin-size;
+}
+
+@import '~@blueprintjs/core/src/blueprint.scss';
+@import '~@blueprintjs/datetime/src/blueprint-datetime.scss';
+
+@import './form/index.scss';
+@import './result/index.scss';
