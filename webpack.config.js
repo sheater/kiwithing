@@ -19,10 +19,15 @@ module.exports = {
 		contentBase: path.join(__dirname, 'dist'),
 	},
 	resolve: {
-		extensions: ['.js', '.jsx']
+		extensions: [ '.js', '.jsx' ]
 	},
 	module: {
 		rules: [
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				loader: 'eslint-loader'
+			},
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
@@ -53,15 +58,14 @@ module.exports = {
 	plugins: [
 		new WebpackCleanupPlugin(),
 		new ExtractTextPlugin({
-			filename: 'style.css',
-			// allChunks: true
+			filename: 'style.css'
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'index.html',
 			template: './src/index.html',
 			files: {
-				css: ['style.css'],
-				js: ['bundle.js'],
+				css: [ 'style.css' ],
+				js: [ 'bundle.js' ],
 			}
 		})
 	]
