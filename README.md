@@ -30,6 +30,8 @@ Then you can start container via:
 npm run start-container
 ```
 
+Check it out at: http://localhost:8082/
+
 And also stop container:
 ```
 npm run stop-container
