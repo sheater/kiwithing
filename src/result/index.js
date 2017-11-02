@@ -8,7 +8,19 @@ function mapStateToProps (state) {
 }
 
 @connect(mapStateToProps)
-export default class SearchResult extends React.Component {
+export default class SearchResult extends React.PureComponent {
+	state = {
+		// pokud uzivatel doposud nic nezadal, nebudeme nic zobrazovat
+		isDirty: false,
+	};
+
+	componentWillReceiveProps (nextProps) {
+		// jakmile dojde k prvnimu hledani, zobrazujeme jiz vysledky, chyby, atd.
+		if (nextProps.result.isPending) {
+			this.setState({ isDirty: true });
+		}
+	}
+
 	_renderItem = (item) => {
 		return <ItemPreview key={item.id} item={item} />;
 	}
@@ -17,7 +29,7 @@ export default class SearchResult extends React.Component {
 		return (
 			<div className="pt-non-ideal-state">
 				<div className="pt-non-ideal-state-visual pt-non-ideal-state-icon">
-					<span className="pt-icon pt-icon-folder-open"></span>
+					<span className="pt-icon pt-icon-error"></span>
 				</div>
 				<h4 className="pt-non-ideal-state-title">Došlo k chybě</h4>
 				<div className="pt-non-ideal-state-description">
@@ -27,11 +39,25 @@ export default class SearchResult extends React.Component {
 		);
 	}
 
+	_renderInvalidInput () {
+		return (
+			<div className="pt-non-ideal-state">
+				<div className="pt-non-ideal-state-visual pt-non-ideal-state-icon">
+					<span className="pt-icon pt-icon-disable"></span>
+				</div>
+				<h4 className="pt-non-ideal-state-title">Neplatné zadání</h4>
+				<div className="pt-non-ideal-state-description">
+					Ve vyhledávacím formuláři je nějaká hodnota špatně vyplněna nebo nevyplněna
+				</div>
+			</div>
+		);
+	}
+
 	_renderNoResults () {
 		return (
 			<div className="pt-non-ideal-state">
 				<div className="pt-non-ideal-state-visual pt-non-ideal-state-icon">
-					<span className="pt-icon pt-icon-folder-open"></span>
+					<span className="pt-icon pt-icon-info-sign"></span>
 				</div>
 				<h4 className="pt-non-ideal-state-title">Kde nic, tu nic</h4>
 				<div className="pt-non-ideal-state-description">
@@ -57,9 +83,16 @@ export default class SearchResult extends React.Component {
 	}
 
 	_renderResult () {
-		const { items, requestStatus, isPending } = this.props.result;
+		const { items, requestStatus, hasInvalidInput, isPending } = this.props.result;
 
-		if (isPending) {
+		if (!this.state.isDirty) {
+			return null;
+		}
+
+		if (hasInvalidInput) {
+			return this._renderInvalidInput();
+		}
+		else if (isPending) {
 			return this._renderSpinner();
 		}
 		else {

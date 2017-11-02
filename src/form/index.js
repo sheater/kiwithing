@@ -14,12 +14,6 @@ function mapStateToProps (state) {
 
 @connect(mapStateToProps)
 export default class SearchForm extends React.PureComponent {
-	_handleSubmit = (event) => {
-		event.preventDefault();
-
-		this.props.dispatch(submitForm());
-	}
-
 	_handleFlyFromChange = (locationId) => {
 		this.props.dispatch(changeFlyFrom(locationId));
 	}

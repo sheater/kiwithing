@@ -5,6 +5,7 @@ import { MenuItem } from "@blueprintjs/core";
 import cx from 'classnames';
 import pick from 'lodash/pick';
 import axios from 'axios';
+import debounce from 'debounce-decorator';
 
 interface IProps {
 	onChange?: (locationId: string) => void;
@@ -23,7 +24,7 @@ interface IState {
 
 export default class LocationInput extends React.PureComponent<IProps, IState> {
 	state = {
-		isPending: false, // NOTE: useless now
+		isPending: true,
 		isPopoverBlocked: true,
 		items: [],
 	};
@@ -38,28 +39,46 @@ export default class LocationInput extends React.PureComponent<IProps, IState> {
         );
 	}
 
-	_handleItemClick = (item: ILocation) => {
+	_triggerChange (id: string) {
 		const { onChange } = this.props;
 
 		if (onChange) {
-			onChange(item.id);
+			onChange(id);
 		}
+	}
+
+	_handleItemClick = (item: ILocation) => {
+		this._triggerChange(item.id);
 	}
 
 	_inputValueRenderer (item: ILocation) {
 		return item.value;
 	}
 
+	_requestSource = null;
+
+	@debounce(300)
 	async _loadSuggestions (term: string) {
 		const params = {
 			term,
 			locale: 'cz'
 		};
 
-		this.setState({ isPending: true });
+		this.setState({ isPending: true, items: [] });
+
+		if (this._requestSource) {
+			this._requestSource.cancel();
+		}
 
 		try {
-			const response = await axios.get('https://api.skypicker.com/places', { params });
+			this._requestSource = axios.CancelToken.source();
+			const response = await axios.get(
+				'https://api.skypicker.com/places',
+				{
+					params,
+					cancelToken: this._requestSource.token
+				}
+			);
 
 			this.setState({
 				items: response.data
@@ -73,6 +92,9 @@ export default class LocationInput extends React.PureComponent<IProps, IState> {
 
 			this.setState({ isPending: false });
 		}
+		finally {
+			this._requestSource = null;
+		}
 	}
 
 	_handleInputChange = (event: any) => {
@@ -82,11 +104,12 @@ export default class LocationInput extends React.PureComponent<IProps, IState> {
 		if (value.length > 1) {
 			this.setState({ isPopoverBlocked: false });
 
-			// TODO: debounce
+			// flow tady rve: Function cannot be called on possibly null value
 			this._loadSuggestions(value);
 		}
 		else {
 			this.setState({ isPopoverBlocked: true });
+			this._triggerChange('');
 		}
 	}
 
@@ -113,7 +136,16 @@ export default class LocationInput extends React.PureComponent<IProps, IState> {
 				popoverProps={popoverProps}
 				inputValueRenderer={this._inputValueRenderer}
 				onItemSelect={this._handleItemClick}
-				noResults={<MenuItem disabled={true} text="Zadání bohužel neodpovídá žádný návrh" />}
+				noResults={
+					<MenuItem
+						disabled={true}
+						text={
+							this.state.isPending
+								? 'Načítám...'
+								: 'Zadání bohužel neodpovídá žádný návrh'
+						}
+					/>
+				}
 			/>
 		);
 	}
