@@ -50,36 +50,8 @@ module.exports = {
 			}
 		]
 	},
-	/*
-	  {
-		include: [
-			path.resolve(__dirname, "src")
-		],
-		test: /\.tsx?$/,
-		// loader: 'ts-loader',
-		loader: isProd ?
-			'babel-loader?presets[]=es2015&plugins[]=transform-runtime!ts-loader' :
-			'ts-loader',
-	},*/
-	// module: {
-	//     loaders
-	//   },
 	plugins: [
 		new WebpackCleanupPlugin(),
-	// new webpack.DefinePlugin({
-	//   'process.env': {
-	//     NODE_ENV: '"production"'
-	//   }
-	// }),
-	// new webpack.optimize.UglifyJsPlugin({
-	//   compress: {
-	//     warnings: false,
-	//     screw_ie8: true,
-	//     drop_console: true,
-	//     drop_debugger: true
-	//   }
-	// }),
-	// new webpack.optimize.OccurrenceOrderPlugin(),
 		new ExtractTextPlugin({
 			filename: 'style.css',
 			// allChunks: true

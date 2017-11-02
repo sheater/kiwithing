@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server"
+	"start": "./node_modules/.bin/webpack-dev-server",
+	"build": "webpack && docker build -t kiwithing .",
+	"run-container": "docker run -p 8082:80 --rm --name kiwithing kiwithing",
+	"stop-container": "docker stop kiwithing",
+	"attach-container": "docker exec -it kiwithing /bin/bash"
   },
   "author": "",
   "license": "ISC",
