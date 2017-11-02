@@ -11,11 +11,11 @@ import storeConfig from './store';
 export default class Main extends React.Component<{}> {
 	_store = null;
 
-	componentWillMount (): void {
+	componentWillMount () {
 		this._store = storeConfig();
 	}
 
-	render () {
+	render (): any {
 		return (
 			<Provider store={this._store}>
 				<div className="layout">

@@ -14,19 +14,19 @@ function mapStateToProps (state) {
 
 @connect(mapStateToProps)
 export default class SearchForm extends React.PureComponent {
-	_handleFlyFromChange = (locationId) => {
+	_handleFlyFromChange = (locationId: string) => {
 		this.props.dispatch(changeFlyFrom(locationId));
 	}
 
-	_handleFlyToChange = (locationId) => {
+	_handleFlyToChange = (locationId: string) => {
 		this.props.dispatch(changeFlyTo(locationId));
 	}
 
-	_handleDateFromChange = (date) => {
+	_handleDateFromChange = (date: Date) => {
 		this.props.dispatch(changeDateFrom(date));
 	}
 
-	_handleDateToChange = (date) => {
+	_handleDateToChange = (date: Date) => {
 		this.props.dispatch(changeDateTo(date));
 	}
 

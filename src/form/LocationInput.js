@@ -83,7 +83,7 @@ export default class LocationInput extends React.PureComponent<IProps, IState> {
 			this.setState({
 				items: response.data
 					.slice(0, 10)
-					.map((item) => pick(item, 'id', 'value')),
+					.map((item: Object) => pick(item, 'id', 'value')),
 				isPending: false,
 			});
 		}

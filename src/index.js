@@ -10,5 +10,5 @@ ReactDOM.render(
 	// <AppContainer>
 		<Main />,
 	// </AppContainer>,
-	(document.getElementById('root') : any)
+	(document.getElementById('root'): any)
 );
