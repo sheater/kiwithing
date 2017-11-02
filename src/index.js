@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
+// FIXME: hot reload
+// import { AppContainer } from 'react-hot-loader';
 
 import Main from './Main';
 

@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 
-import Header from './Header';
+import Header from './header';
 import Form from './form';
 import Result from './result';
 
